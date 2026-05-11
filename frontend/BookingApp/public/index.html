@@ -13,14 +13,122 @@
                 sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            background-color: #ffffff;
         }
-        #root {
+        .container {
+            flex: 1;
+            background-color: #ffffff;
+            padding-horizontal: 20px;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
             height: 100vh;
-            width: 100vw;
+        }
+        .header {
+            align-items: center;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 16px;
+            color: #666666;
+        }
+        .form {
+            margin-bottom: 30px;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+        .input {
+            border-width: 1px;
+            border-color: #dddddd;
+            border-radius: 8px;
+            padding-horizontal: 16px;
+            padding-vertical: 14px;
+            font-size: 16px;
+            background-color: #fafafa;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .button {
+            background-color: #007AFF;
+            border-radius: 8px;
+            padding-vertical: 16px;
+            align-items: center;
+            margin-bottom: 16px;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .footer-text {
+            color: #666666;
+            font-size: 14px;
+        }
+        .link-text {
+            color: #007AFF;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-left: 5px;
         }
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div class="container">
+        <div class="header">
+            <div class="title">Welcome Back</div>
+            <div class="subtitle">Sign in to your account</div>
+        </div>
+
+        <div class="form">
+            <div class="input-container">
+                <input type="email" class="input" placeholder="Email" id="email">
+            </div>
+
+            <div class="input-container">
+                <input type="password" class="input" placeholder="Password" id="password">
+            </div>
+
+            <button class="button" onclick="handleLogin()">Sign In</button>
+        </div>
+
+        <div class="footer">
+            <span class="footer-text">Don't have an account?</span>
+            <a href="#" class="link-text">Sign Up</a>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email) {
+                alert('Please enter your email');
+                return;
+            }
+            
+            if (!password) {
+                alert('Please enter your password');
+                return;
+            }
+            
+            alert('Login attempted with: ' + email);
+            // TODO: Connect to your FastAPI backend
+        }
+    </script>
 </body>
 </html>
