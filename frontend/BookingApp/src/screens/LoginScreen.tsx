@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, Image } from 'react-native';
 
 const LoginScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
@@ -49,6 +49,11 @@ const LoginScreen = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <Image 
+          source={require('../../assets/ihjaz_logo.png')} 
+          style={styles.logo}
+          resizeMode="contain"
+        />
         <Text style={styles.title}>Welcome Back</Text>
         <Text style={styles.subtitle}>Sign in to your account</Text>
       </View>
@@ -114,6 +119,11 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 40,
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: 20,
   },
   title: {
     fontSize: 32,
