@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ihjaz - Confirm Booking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: linear-gradient(135deg, #FF9500 0%, #5AC8FA 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-button {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: opacity 0.3s ease;
+        }
+        
+        .back-button:hover {
+            opacity: 0.8;
+        }
+        
+        .title {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .summary-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .summary-label {
+            font-size: 16px;
+            color: #666666;
+        }
+        
+        .summary-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333333;
+        }
+        
+        .divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 20px 0;
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .info-title {
+            font-size: 16px;
+            color: #666666;
+            margin-bottom: 8px;
+        }
+        
+        .user-name {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 4px;
+        }
+        
+        .user-email {
+            font-size: 16px;
+            color: #666666;
+        }
+        
+        .notes-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .notes-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 16px;
+        }
+        
+        .notes-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            background-color: #fafafa;
+            min-height: 100px;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+        
+        .notes-input:focus {
+            outline: none;
+            border-color: #007AFF;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+        
+        .terms-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .terms-text {
+            font-size: 14px;
+            color: #666666;
+            line-height: 1.6;
+            text-align: center;
+        }
+        
+        .confirm-button {
+            background: linear-gradient(135deg, #007AFF 0%, #5AC8FA 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4);
+            margin: 20px;
+            width: 100%;
+        }
+        
+        .confirm-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.5);
+        }
+        
+        .confirm-button:disabled {
+            background: #CCCCCC;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="/datetime-selection.html" class="back-button">← Back</a>
+            <div class="title">Confirm Booking</div>
+            <div style="width: 50px;"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="summary-card">
+            <div class="summary-title">Booking Summary</div>
+            
+            <div class="summary-item">
+                <span class="summary-label">Service</span>
+                <span class="summary-value" id="serviceName">Service Name</span>
+            </div>
+            
+            <div class="summary-item">
+                <span class="summary-label">Duration</span>
+                <span class="summary-value" id="serviceDuration">Duration</span>
+            </div>
+            
+            <div class="summary-item">
+                <span class="summary-label">Price</span>
+                <span class="summary-value" id="servicePrice">Price</span>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="summary-item">
+                <span class="summary-label">Date</span>
+                <span class="summary-value" id="bookingDate">Date</span>
+            </div>
+            
+            <div class="summary-item">
+                <span class="summary-label">Time</span>
+                <span class="summary-value" id="bookingTime">Time</span>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-title">Booking For</div>
+            <div class="user-name">User</div>
+            <div class="user-email">user@example.com</div>
+        </div>
+
+        <div class="notes-section">
+            <div class="notes-title">Additional Notes (Optional)</div>
+            <textarea class="notes-input" id="notes" placeholder="Add any special requests or notes..."></textarea>
+        </div>
+
+        <div class="terms-section">
+            <div class="terms-text">By confirming this booking, you agree to our terms and conditions.</div>
+        </div>
+
+        <button class="confirm-button" id="confirmButton" onclick="handleConfirm()">Confirm Booking</button>
+    </div>
+
+    <script>
+        let bookingDetails = null;
+
+        // Load booking details from sessionStorage
+        window.onload = function() {
+            const bookingData = sessionStorage.getItem('bookingDetails');
+            if (bookingData) {
+                bookingDetails = JSON.parse(bookingData);
+                document.getElementById('serviceName').textContent = bookingDetails.service.name;
+                document.getElementById('serviceDuration').textContent = bookingDetails.service.duration;
+                document.getElementById('servicePrice').textContent = bookingDetails.service.price;
+                document.getElementById('bookingDate').textContent = bookingDetails.date;
+                document.getElementById('bookingTime').textContent = bookingDetails.time;
+            } else {
+                // Redirect to service selection if no booking details
+                window.location.href = '/service-selection.html';
+            }
+        };
+
+        function handleConfirm() {
+            const notes = document.getElementById('notes').value;
+            
+            if (bookingDetails) {
+                // In a real app, you would send this to your backend
+                console.log('Booking confirmed:', {
+                    ...bookingDetails,
+                    notes
+                });
+                
+                alert('Booking confirmed successfully!');
+                
+                // Clear sessionStorage
+                sessionStorage.removeItem('selectedService');
+                sessionStorage.removeItem('bookingDetails');
+                
+                // Redirect to home
+                window.location.href = '/home.html';
+            }
+        }
+    </script>
+</body>
+</html>

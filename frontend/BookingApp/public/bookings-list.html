@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ihjaz - My Bookings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #FF9500 0%, #5AC8FA 100%);
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .tabs-container {
+            background: white;
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #666666;
+        }
+        
+        .tab:hover {
+            background: #f8f9fa;
+        }
+        
+        .tab.active {
+            background: #007AFF;
+            color: white;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333333;
+        }
+        
+        .booking-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .booking-info {
+            flex: 1;
+        }
+        
+        .booking-service {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 4px;
+        }
+        
+        .booking-datetime {
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 4px;
+        }
+        
+        .booking-details {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+        
+        .booking-detail {
+            font-size: 14px;
+            color: #666666;
+        }
+        
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .status-confirmed {
+            background: #34C759;
+        }
+        
+        .status-pending {
+            background: #FF9500;
+        }
+        
+        .status-completed {
+            background: #007AFF;
+        }
+        
+        .status-cancelled {
+            background: #FF3B30;
+        }
+        
+        .booking-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .action-button {
+            flex: 1;
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .action-button:hover {
+            background: #0056b3;
+        }
+        
+        .cancel-button {
+            background: #FF3B30;
+        }
+        
+        .cancel-button:hover {
+            background: #D63027;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-text {
+            font-size: 16px;
+            color: #666666;
+            margin-bottom: 20px;
+        }
+        
+        .empty-button {
+            background: linear-gradient(135deg, #007AFF 0%, #5AC8FA 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4);
+        }
+        
+        .empty-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.5);
+        }
+        
+        .logout-button {
+            background: #FF3B30;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .logout-button:hover {
+            background: #D63027;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <img src="/ihjaz_logo.png" alt="Ihjaz Logo" class="logo" onerror="this.style.display='none'">
+            <div class="nav-links">
+                <a href="/home.html" class="nav-link">Home</a>
+                <a href="/bookings-list.html" class="nav-link">My Bookings</a>
+                <a href="/profile.html" class="nav-link">Profile</a>
+                <button class="logout-button" onclick="handleLogout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="tabs-container">
+            <div class="tab active" id="upcomingTab" onclick="switchTab('upcoming')">Upcoming</div>
+            <div class="tab" id="pastTab" onclick="switchTab('past')">Past</div>
+        </div>
+
+        <div class="section" id="bookingsSection">
+            <div class="section-header">
+                <div class="section-title" id="sectionTitle">Upcoming Bookings</div>
+            </div>
+            
+            <div id="bookingsList">
+                <!-- Bookings will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let activeTab = 'upcoming';
+        
+        const upcomingBookings = [
+            { id: 1, service: 'Haircut', date: 'May 15, 2026', time: '10:00 AM', status: 'Confirmed', price: '$25' },
+            { id: 2, service: 'Massage', date: 'May 18, 2026', time: '2:00 PM', status: 'Pending', price: '$60' },
+        ];
+
+        const pastBookings = [
+            { id: 3, service: 'Facial', date: 'May 1, 2026', time: '11:00 AM', status: 'Completed', price: '$45' },
+            { id: 4, service: 'Manicure', date: 'April 25, 2026', time: '3:00 PM', status: 'Completed', price: '$20' },
+            { id: 5, service: 'Hair Coloring', date: 'April 10, 2026', time: '1:00 PM', status: 'Cancelled', price: '$80' },
+        ];
+
+        function getStatusClass(status) {
+            switch (status) {
+                case 'Confirmed':
+                    return 'status-confirmed';
+                case 'Pending':
+                    return 'status-pending';
+                case 'Completed':
+                    return 'status-completed';
+                case 'Cancelled':
+                    return 'status-cancelled';
+                default:
+                    return '';
+            }
+        }
+
+        function renderBookings() {
+            const bookings = activeTab === 'upcoming' ? upcomingBookings : pastBookings;
+            const bookingsList = document.getElementById('bookingsList');
+            
+            if (bookings.length === 0) {
+                bookingsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-text">
+                            ${activeTab === 'upcoming' ? 'No upcoming bookings' : 'No past bookings'}
+                        </div>
+                        ${activeTab === 'upcoming' ? `
+                            <button class="empty-button" onclick="window.location.href='/service-selection.html'">
+                                Book Now
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+            } else {
+                bookingsList.innerHTML = bookings.map(booking => `
+                    <div class="booking-card">
+                        <div class="booking-info">
+                            <div class="booking-service">${booking.service}</div>
+                            <div class="booking-datetime">${booking.date} at ${booking.time}</div>
+                            <div class="booking-details">
+                                <span class="booking-detail">⏱ Duration: ${booking.duration || '30 min'}</span>
+                                <span class="booking-detail">💰 ${booking.price}</span>
+                            </div>
+                            ${activeTab === 'upcoming' && booking.status === 'Confirmed' ? `
+                                <div class="booking-actions">
+                                    <button class="action-button" onclick="rescheduleBooking(${booking.id})">Reschedule</button>
+                                    <button class="action-button cancel-button" onclick="cancelBooking(${booking.id})">Cancel</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="status-badge ${getStatusClass(booking.status)}">${booking.status}</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function switchTab(tab) {
+            activeTab = tab;
+            
+            // Update tab styles
+            document.getElementById('upcomingTab').classList.remove('active');
+            document.getElementById('pastTab').classList.remove('active');
+            document.getElementById(`${tab}Tab`).classList.add('active');
+            
+            // Update section title
+            document.getElementById('sectionTitle').textContent = 
+                tab === 'upcoming' ? 'Upcoming Bookings' : 'Past Bookings';
+            
+            // Re-render bookings
+            renderBookings();
+        }
+
+        function rescheduleBooking(bookingId) {
+            alert('Reschedule booking ' + bookingId);
+            // TODO: Implement reschedule functionality
+        }
+
+        function cancelBooking(bookingId) {
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                alert('Booking ' + bookingId + ' cancelled');
+                // TODO: Implement cancel functionality
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/index.html';
+            }
+        }
+
+        // Initial render
+        renderBookings();
+    </script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ihjaz - Select Date & Time</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: linear-gradient(135deg, #FF9500 0%, #5AC8FA 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-button {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: opacity 0.3s ease;
+        }
+        
+        .back-button:hover {
+            opacity: 0.8;
+        }
+        
+        .title {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .service-info {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .service-name {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 8px;
+        }
+        
+        .service-details {
+            font-size: 16px;
+            color: #666666;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        
+        .date-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .date-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 80px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .date-card:hover {
+            background: #e9ecef;
+        }
+        
+        .date-card.selected {
+            border-color: #007AFF;
+            background: #E8F4FF;
+        }
+        
+        .day-text {
+            font-size: 12px;
+            color: #666666;
+            margin-bottom: 4px;
+        }
+        
+        .day-text.selected {
+            color: #007AFF;
+            font-weight: 600;
+        }
+        
+        .date-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 4px;
+        }
+        
+        .date-text.selected {
+            color: #007AFF;
+        }
+        
+        .month-text {
+            font-size: 12px;
+            color: #666666;
+        }
+        
+        .month-text.selected {
+            color: #007AFF;
+            font-weight: 600;
+        }
+        
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+        
+        .time-slot {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .time-slot:hover {
+            background: #e9ecef;
+        }
+        
+        .time-slot.selected {
+            border-color: #007AFF;
+            background: #E8F4FF;
+        }
+        
+        .time-text {
+            font-size: 14px;
+            color: #333333;
+            font-weight: 500;
+        }
+        
+        .time-text.selected {
+            color: #007AFF;
+            font-weight: 600;
+        }
+        
+        .continue-button {
+            background: linear-gradient(135deg, #007AFF 0%, #5AC8FA 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4);
+            margin: 20px;
+        }
+        
+        .continue-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.5);
+        }
+        
+        .continue-button:disabled {
+            background: #CCCCCC;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="/service-selection.html" class="back-button">← Back</a>
+            <div class="title">Select Date & Time</div>
+            <div style="width: 50px;"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="service-info">
+            <div class="service-name" id="serviceName">Service Name</div>
+            <div class="service-details" id="serviceDetails">Duration • Price</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Select Date</div>
+            <div class="date-scroll" id="dateScroll">
+                <div class="date-card" onclick="selectDate(this, 'May 15, 2026')">
+                    <div class="day-text">Mon</div>
+                    <div class="date-text">15</div>
+                    <div class="month-text">May</div>
+                </div>
+                <div class="date-card" onclick="selectDate(this, 'May 16, 2026')">
+                    <div class="day-text">Tue</div>
+                    <div class="date-text">16</div>
+                    <div class="month-text">May</div>
+                </div>
+                <div class="date-card" onclick="selectDate(this, 'May 17, 2026')">
+                    <div class="day-text">Wed</div>
+                    <div class="date-text">17</div>
+                    <div class="month-text">May</div>
+                </div>
+                <div class="date-card" onclick="selectDate(this, 'May 18, 2026')">
+                    <div class="day-text">Thu</div>
+                    <div class="date-text">18</div>
+                    <div class="month-text">May</div>
+                </div>
+                <div class="date-card" onclick="selectDate(this, 'May 19, 2026')">
+                    <div class="day-text">Fri</div>
+                    <div class="date-text">19</div>
+                    <div class="month-text">May</div>
+                </div>
+                <div class="date-card" onclick="selectDate(this, 'May 20, 2026')">
+                    <div class="day-text">Sat</div>
+                    <div class="date-text">20</div>
+                    <div class="month-text">May</div>
+                </div>
+                <div class="date-card" onclick="selectDate(this, 'May 21, 2026')">
+                    <div class="day-text">Sun</div>
+                    <div class="date-text">21</div>
+                    <div class="month-text">May</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Select Time</div>
+            <div class="time-grid" id="timeGrid">
+                <div class="time-slot" onclick="selectTime(this, '9:00 AM')">
+                    <div class="time-text">9:00 AM</div>
+                </div>
+                <div class="time-slot" onclick="selectTime(this, '10:00 AM')">
+                    <div class="time-text">10:00 AM</div>
+                </div>
+                <div class="time-slot" onclick="selectTime(this, '11:00 AM')">
+                    <div class="time-text">11:00 AM</div>
+                </div>
+                <div class="time-slot" onclick="selectTime(this, '12:00 PM')">
+                    <div class="time-text">12:00 PM</div>
+                </div>
+                <div class="time-slot" onclick="selectTime(this, '1:00 PM')">
+                    <div class="time-text">1:00 PM</div>
+                </div>
+                <div class="time-slot" onclick="selectTime(this, '2:00 PM')">
+                    <div class="time-text">2:00 PM</div>
+                </div>
+                <div class="time-slot" onclick="selectTime(this, '3:00 PM')">
+                    <div class="time-text">3:00 PM</div>
+                </div>
+                <div class="time-slot" onclick="selectTime(this, '4:00 PM')">
+                    <div class="time-text">4:00 PM</div>
+                </div>
+                <div class="time-slot" onclick="selectTime(this, '5:00 PM')">
+                    <div class="time-text">5:00 PM</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="continue-button" id="continueButton" onclick="handleContinue()" disabled>Continue</button>
+    </div>
+
+    <script>
+        let selectedDate = null;
+        let selectedTime = null;
+        let selectedService = null;
+
+        // Load selected service from sessionStorage
+        window.onload = function() {
+            const serviceData = sessionStorage.getItem('selectedService');
+            if (serviceData) {
+                selectedService = JSON.parse(serviceData);
+                document.getElementById('serviceName').textContent = selectedService.name;
+                document.getElementById('serviceDetails').textContent = `${selectedService.duration} • ${selectedService.price}`;
+            } else {
+                // Redirect to service selection if no service selected
+                window.location.href = '/service-selection.html';
+            }
+        };
+
+        function selectDate(element, date) {
+            // Remove selected class from all date cards
+            document.querySelectorAll('.date-card').forEach(card => {
+                card.classList.remove('selected');
+                card.querySelector('.day-text').classList.remove('selected');
+                card.querySelector('.date-text').classList.remove('selected');
+                card.querySelector('.month-text').classList.remove('selected');
+            });
+            
+            // Add selected class to clicked card
+            element.classList.add('selected');
+            element.querySelector('.day-text').classList.add('selected');
+            element.querySelector('.date-text').classList.add('selected');
+            element.querySelector('.month-text').classList.add('selected');
+            
+            selectedDate = date;
+            checkContinueButton();
+        }
+
+        function selectTime(element, time) {
+            // Remove selected class from all time slots
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('selected');
+                slot.querySelector('.time-text').classList.remove('selected');
+            });
+            
+            // Add selected class to clicked slot
+            element.classList.add('selected');
+            element.querySelector('.time-text').classList.add('selected');
+            
+            selectedTime = time;
+            checkContinueButton();
+        }
+
+        function checkContinueButton() {
+            const continueButton = document.getElementById('continueButton');
+            continueButton.disabled = !(selectedDate && selectedTime);
+        }
+
+        function handleContinue() {
+            if (selectedDate && selectedTime && selectedService) {
+                // Store booking details in sessionStorage
+                const bookingDetails = {
+                    service: selectedService,
+                    date: selectedDate,
+                    time: selectedTime
+                };
+                sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+                window.location.href = '/booking-confirmation.html';
+            }
+        }
+    </script>
+</body>
+</html>
