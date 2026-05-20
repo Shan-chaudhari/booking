@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< Updated upstream
     <title>Ihjaz - Booking App</title>
-=======
-    <title>Booking App - Ihjaz</title>
->>>>>>> Stashed changes
     <style>
         * {
             margin: 0;
@@ -21,7 +17,6 @@
                 sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-<<<<<<< Updated upstream
             background: linear-gradient(135deg, #FF9500 0%, #5AC8FA 100%);
             min-height: 100vh;
             display: flex;
@@ -152,26 +147,10 @@
         .forgot-password-text:hover {
             color: #5AC8FA;
             text-decoration: underline;
-=======
-            background-color: #f8f9fa;
-        }
-        #root {
-            height: 100vh;
-            width: 100vw;
-        }
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-size: 18px;
-            color: #666;
->>>>>>> Stashed changes
         }
     </style>
 </head>
 <body>
-<<<<<<< Updated upstream
     <div class="container">
         <div class="header">
             <img src="/ihjaz_logo.png" alt="Ihjaz Logo" class="logo" onerror="this.style.display='none'">
@@ -202,7 +181,7 @@
     </div>
 
     <script>
-        function handleLogin() {
+        async function handleLogin() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
@@ -216,16 +195,30 @@
                 return;
             }
             
-            alert('Login attempted with: ' + email);
-            window.location.href = '/home.html';
-            // TODO: Connect to your FastAPI backend
+            try {
+                const response = await fetch('http://localhost:8002/user/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Login successful!');
+                    window.location.href = '/home.html';
+                } else {
+                    alert(data.error || 'Login failed. Please try again.');
+                }
+            } catch (error) {
+                alert('Network error. Please check your connection.');
+            }
         }
     </script>
-=======
-    <div id="root">
-        <div class="loading">Loading Booking App...</div>
-    </div>
-    <script src="http://localhost:8081/index.bundle.js?platform=web"></script>
->>>>>>> Stashed changes
 </body>
 </html>
