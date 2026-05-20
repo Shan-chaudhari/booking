@@ -1,20 +1,19 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-class UserRegister(BaseModel):
+class UserRegister(BaseModel): #defines what registration data looks like/validates incoming requests
     name: str
     email: str
     password: str
 
-app = FastAPI()
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+app = FastAPI() #server creation/ready to handle http requests
 
 @app.post("/user/register")
 def register_user(user: UserRegister):
-    return {"message": "User registered successfully", "user": user.email}
+    if "@" not in user.email:
+        return {"error": "Invalid email format"}
+
+    return {"message": "User registered successfully", "name": user.name, "email": user.email}
 
 class UserLogin(BaseModel):
     email: str

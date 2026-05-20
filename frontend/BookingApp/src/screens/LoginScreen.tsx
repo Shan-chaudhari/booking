@@ -31,16 +31,30 @@ const LoginScreen = ({ navigation }: any) => {
     setIsLoading(true);
     
     try {
-      // TODO: Replace with actual API call
-      // const response = await authService.login(email, password);
-      
-      // Simulate API call
-      await new Promise<void>(resolve => setTimeout(() => resolve(), 2000));
-      
-      // Navigate to home screen on successful login
-      navigation.replace('Home');
+      // Call your backend API
+      const response = await fetch('http://localhost:8002/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Login successful - navigate to home
+        Alert.alert('Success', 'Login successful!');
+        navigation.replace('Home');
+      } else {
+        // Login failed - show error message
+        Alert.alert('Error', data.error || 'Login failed. Please try again.');
+      }
     } catch (error) {
-      Alert.alert('Error', 'Login failed. Please try again.');
+      Alert.alert('Error', 'Network error. Please check your connection.');
     } finally {
       setIsLoading(false);
     }
