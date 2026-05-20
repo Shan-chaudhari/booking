@@ -260,6 +260,7 @@
                 <a href="/home.html" class="nav-link">Home</a>
                 <a href="/bookings-list.html" class="nav-link">My Bookings</a>
                 <a href="/profile.html" class="nav-link">Profile</a>
+                <a href="/settings.html" class="nav-link">Settings</a>
                 <button class="logout-button" onclick="handleLogout()">Logout</button>
             </div>
         </div>
@@ -285,12 +286,48 @@
     <script>
         let activeTab = 'upcoming';
         
-        const upcomingBookings = [
+        async function loadBookings() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('http://localhost:8000/api/bookings', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Filter bookings into upcoming and past
+                    const now = new Date();
+                    const allBookings = data.bookings || [];
+                    
+                    upcomingBookings = allBookings.filter(booking => {
+                        const bookingDate = new Date(booking.date);
+                        return bookingDate >= now && booking.status !== 'Cancelled';
+                    });
+                    
+                    pastBookings = allBookings.filter(booking => {
+                        const bookingDate = new Date(booking.date);
+                        return bookingDate < now || booking.status === 'Cancelled';
+                    });
+                    
+                    renderBookings();
+                } else {
+                    console.error('Failed to load bookings:', data.detail);
+                }
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+            }
+        }
+
+        let upcomingBookings = [
             { id: 1, service: 'Haircut', date: 'May 15, 2026', time: '10:00 AM', status: 'Confirmed', price: '$25' },
             { id: 2, service: 'Massage', date: 'May 18, 2026', time: '2:00 PM', status: 'Pending', price: '$60' },
         ];
 
-        const pastBookings = [
+        let pastBookings = [
             { id: 3, service: 'Facial', date: 'May 1, 2026', time: '11:00 AM', status: 'Completed', price: '$45' },
             { id: 4, service: 'Manicure', date: 'April 25, 2026', time: '3:00 PM', status: 'Completed', price: '$20' },
             { id: 5, service: 'Hair Coloring', date: 'April 10, 2026', time: '1:00 PM', status: 'Cancelled', price: '$80' },
@@ -367,26 +404,47 @@
             renderBookings();
         }
 
-        function rescheduleBooking(bookingId) {
+        async function rescheduleBooking(bookingId) {
             alert('Reschedule booking ' + bookingId);
             // TODO: Implement reschedule functionality
         }
 
-        function cancelBooking(bookingId) {
+        async function cancelBooking(bookingId) {
             if (confirm('Are you sure you want to cancel this booking?')) {
-                alert('Booking ' + bookingId + ' cancelled');
-                // TODO: Implement cancel functionality
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`http://localhost:8000/api/bookings/${bookingId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+                    
+                    if (response.ok) {
+                        alert('Booking cancelled successfully');
+                        loadBookings();
+                    } else {
+                        alert('Failed to cancel booking');
+                    }
+                } catch (error) {
+                    console.error('Error cancelling booking:', error);
+                    alert('Failed to cancel booking');
+                }
             }
         }
 
         function handleLogout() {
             if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
                 window.location.href = '/index.html';
             }
         }
 
-        // Initial render
-        renderBookings();
+        // Initial load
+        window.onload = function() {
+            loadBookings();
+        };
     </script>
 </body>
 </html>

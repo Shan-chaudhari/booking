@@ -278,24 +278,45 @@
             }
         };
 
-        function handleConfirm() {
+        async function handleConfirm() {
             const notes = document.getElementById('notes').value;
             
             if (bookingDetails) {
-                // In a real app, you would send this to your backend
-                console.log('Booking confirmed:', {
-                    ...bookingDetails,
-                    notes
-                });
-                
-                alert('Booking confirmed successfully!');
-                
-                // Clear sessionStorage
-                sessionStorage.removeItem('selectedService');
-                sessionStorage.removeItem('bookingDetails');
-                
-                // Redirect to home
-                window.location.href = '/home.html';
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch('http://localhost:8000/api/bookings', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({
+                            service_id: bookingDetails.service.id,
+                            service_name: bookingDetails.service.name,
+                            date: bookingDetails.date,
+                            time: bookingDetails.time,
+                            notes: notes,
+                        }),
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        alert('Booking confirmed successfully!');
+                        
+                        // Clear sessionStorage
+                        sessionStorage.removeItem('selectedService');
+                        sessionStorage.removeItem('bookingDetails');
+                        
+                        // Redirect to home
+                        window.location.href = '/home.html';
+                    } else {
+                        alert(data.detail || 'Booking failed');
+                    }
+                } catch (error) {
+                    console.error('Booking error:', error);
+                    alert('Booking failed. Please try again.');
+                }
             }
         }
     </script>

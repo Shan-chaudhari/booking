@@ -191,7 +191,7 @@
     </div>
 
     <script>
-        function handleRegister() {
+        async function handleRegister() {
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -223,9 +223,30 @@
                 return;
             }
             
-            alert('Registration attempted for: ' + name);
-            window.location.href = '/home.html';
-            // TODO: Connect to your FastAPI backend
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, password }),
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Store token in localStorage
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    alert('Registration successful!');
+                    window.location.href = '/home.html';
+                } else {
+                    alert(data.detail || 'Registration failed');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('Registration failed. Please try again.');
+            }
         }
     </script>
 </body>

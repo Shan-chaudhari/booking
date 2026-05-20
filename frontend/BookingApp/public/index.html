@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< Updated upstream
     <title>Ihjaz - Booking App</title>
-=======
-    <title>Booking App - Ihjaz</title>
->>>>>>> Stashed changes
     <style>
         * {
             margin: 0;
@@ -21,7 +17,6 @@
                 sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-<<<<<<< Updated upstream
             background: linear-gradient(135deg, #FF9500 0%, #5AC8FA 100%);
             min-height: 100vh;
             display: flex;
@@ -152,26 +147,97 @@
         .forgot-password-text:hover {
             color: #5AC8FA;
             text-decoration: underline;
-=======
-            background-color: #f8f9fa;
         }
-        #root {
-            height: 100vh;
-            width: 100vw;
+        
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
         }
-        .loading {
+        
+        .notification {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             display: flex;
-            justify-content: center;
             align-items: center;
-            height: 100vh;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+            max-width: 350px;
+        }
+        
+        .notification.success {
+            border-left: 4px solid #34C759;
+        }
+        
+        .notification.error {
+            border-left: 4px solid #FF3B30;
+        }
+        
+        .notification.info {
+            border-left: 4px solid #007AFF;
+        }
+        
+        .notification-icon {
+            font-size: 20px;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 4px;
+        }
+        
+        .notification-message {
+            font-size: 12px;
+            color: #666666;
+        }
+        
+        .notification-close {
+            cursor: pointer;
             font-size: 18px;
-            color: #666;
->>>>>>> Stashed changes
+            color: #999999;
+            transition: color 0.3s ease;
+        }
+        
+        .notification-close:hover {
+            color: #333333;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
-<<<<<<< Updated upstream
+    <div class="notification-container" id="notificationContainer"></div>
+    
     <div class="container">
         <div class="header">
             <img src="/ihjaz_logo.png" alt="Ihjaz Logo" class="logo" onerror="this.style.display='none'">
@@ -202,30 +268,74 @@
     </div>
 
     <script>
-        function handleLogin() {
+        function showNotification(type, title, message) {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const icons = {
+                success: '✓',
+                error: '✕',
+                info: 'ℹ'
+            };
+            
+            notification.innerHTML = `
+                <div class="notification-icon">${icons[type]}</div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <div class="notification-close" onclick="this.parentElement.remove()">×</div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        async function handleLogin() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
             if (!email) {
-                alert('Please enter your email address');
+                showNotification('error', 'Error', 'Please enter your email address');
                 return;
             }
             
             if (!password) {
-                alert('Please enter your password');
+                showNotification('error', 'Error', 'Please enter your password');
                 return;
             }
             
-            alert('Login attempted with: ' + email);
-            window.location.href = '/home.html';
-            // TODO: Connect to your FastAPI backend
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Store token in localStorage
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    showNotification('success', 'Success', 'Login successful!');
+                    setTimeout(() => window.location.href = '/home.html', 1000);
+                } else {
+                    showNotification('error', 'Error', data.detail || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showNotification('error', 'Error', 'Login failed. Please try again.');
+            }
         }
     </script>
-=======
-    <div id="root">
-        <div class="loading">Loading Booking App...</div>
-    </div>
-    <script src="http://localhost:8081/index.bundle.js?platform=web"></script>
->>>>>>> Stashed changes
 </body>
 </html>
