@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ihjaz - Booking App</title>
+    <title>Ihjaz - Sign Up</title>
     <style>
         * {
             margin: 0;
@@ -63,7 +63,7 @@
         }
         
         .input-container {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         
         .input {
@@ -83,6 +83,30 @@
             box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
         }
         
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .terms-text {
+            font-size: 14px;
+            color: #666666;
+        }
+        
+        .terms-link {
+            color: #007AFF;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
         .button {
             width: 100%;
             padding: 16px;
@@ -100,10 +124,6 @@
         .button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 122, 255, 0.5);
-        }
-        
-        .button:active {
-            transform: translateY(0);
         }
         
         .footer {
@@ -129,36 +149,21 @@
             color: #5AC8FA;
             text-decoration: underline;
         }
-        
-        .forgot-password {
-            text-align: center;
-            margin-top: 16px;
-        }
-        
-        .forgot-password-text {
-            color: #007AFF;
-            font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-        
-        .forgot-password-text:hover {
-            color: #5AC8FA;
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <img src="/ihjaz_logo.png" alt="Ihjaz Logo" class="logo" onerror="this.style.display='none'">
-            <div class="title">Welcome Back</div>
-            <div class="subtitle">Sign in to your Ihjaz account</div>
+            <div class="title">Create Account</div>
+            <div class="subtitle">Sign up to get started with Ihjaz</div>
         </div>
 
         <div class="form">
+            <div class="input-container">
+                <input type="text" class="input" placeholder="Full Name" id="name">
+            </div>
+
             <div class="input-container">
                 <input type="email" class="input" placeholder="Email address" id="email">
             </div>
@@ -167,23 +172,36 @@
                 <input type="password" class="input" placeholder="Password" id="password">
             </div>
 
-            <button class="button" onclick="handleLogin()">Sign In</button>
-            
-            <div class="forgot-password">
-                <a href="#" class="forgot-password-text">Forgot Password?</a>
+            <div class="input-container">
+                <input type="password" class="input" placeholder="Confirm Password" id="confirmPassword">
             </div>
+
+            <div class="checkbox-container">
+                <input type="checkbox" class="checkbox" id="terms">
+                <span class="terms-text">I agree to the <a href="#" class="terms-link">Terms and Conditions</a></span>
+            </div>
+
+            <button class="button" onclick="handleRegister()">Sign Up</button>
         </div>
 
         <div class="footer">
-            <span class="footer-text">Don't have an account?</span>
-            <a href="/register.html" class="link-text">Sign Up</a>
+            <span class="footer-text">Already have an account?</span>
+            <a href="/index.html" class="link-text">Sign In</a>
         </div>
     </div>
 
     <script>
-        function handleLogin() {
+        function handleRegister() {
+            const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const terms = document.getElementById('terms').checked;
+            
+            if (!name) {
+                alert('Please enter your name');
+                return;
+            }
             
             if (!email) {
                 alert('Please enter your email address');
@@ -195,7 +213,17 @@
                 return;
             }
             
-            alert('Login attempted with: ' + email);
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            
+            if (!terms) {
+                alert('Please agree to the terms and conditions');
+                return;
+            }
+            
+            alert('Registration attempted for: ' + name);
             window.location.href = '/home.html';
             // TODO: Connect to your FastAPI backend
         }
