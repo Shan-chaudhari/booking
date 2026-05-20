@@ -87,11 +87,39 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
         
-        .section-title {
-            font-size: 20px;
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .month-navigation {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .nav-button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            background: #0056b3;
+        }
+        
+        .current-month {
+            font-size: 18px;
             font-weight: 600;
             color: #333333;
-            margin-bottom: 20px;
         }
         
         .date-scroll {
@@ -99,6 +127,22 @@
             gap: 12px;
             overflow-x: auto;
             padding-bottom: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #007AFF #f0f0f0;
+        }
+        
+        .date-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .date-scroll::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 3px;
+        }
+        
+        .date-scroll::-webkit-scrollbar-thumb {
+            background: #007AFF;
+            border-radius: 3px;
         }
         
         .date-card {
@@ -232,7 +276,13 @@
         </div>
 
         <div class="section">
-            <div class="section-title">Select Date</div>
+            <div class="section-header">
+                <div class="month-navigation">
+                    <button class="nav-button" onclick="navigateMonth(-1)">←</button>
+                    <div class="current-month" id="currentMonth">May 2026</div>
+                    <button class="nav-button" onclick="navigateMonth(1)">→</button>
+                </div>
+            </div>
             <div class="date-scroll" id="dateScroll">
                 <div class="date-card" onclick="selectDate(this, 'May 15, 2026')">
                     <div class="day-text">Mon</div>
@@ -312,6 +362,9 @@
         let selectedDate = null;
         let selectedTime = null;
         let selectedService = null;
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
 
         // Load selected service from sessionStorage
         window.onload = function() {
@@ -324,7 +377,57 @@
                 // Redirect to service selection if no service selected
                 window.location.href = '/service-selection.html';
             }
+            
+            updateCalendar();
         };
+
+        function navigateMonth(direction) {
+            currentMonth += direction;
+            
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            
+            updateCalendar();
+        }
+
+        function updateCalendar() {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                          'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('currentMonth').textContent = `${months[currentMonth]} ${currentYear}`;
+            
+            // Generate dates for the current month
+            const dateScroll = document.getElementById('dateScroll');
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            
+            let html = '';
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(currentYear, currentMonth, day);
+                const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                const dayName = dayNames[date.getDay()];
+                
+                // Skip past dates
+                if (date < new Date().setHours(0,0,0,0)) {
+                    continue;
+                }
+                
+                html += `
+                    <div class="date-card" onclick="selectDate(this, '${months[currentMonth]} ${day}, ${currentYear}')">
+                        <div class="day-text">${dayName}</div>
+                        <div class="date-text">${day}</div>
+                        <div class="month-text">${months[currentMonth].substring(0, 3)}</div>
+                    </div>
+                `;
+            }
+            
+            dateScroll.innerHTML = html;
+        }
 
         function selectDate(element, date) {
             // Remove selected class from all date cards

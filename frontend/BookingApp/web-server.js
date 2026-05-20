@@ -41,6 +41,10 @@ app.get('/bookings-list.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'bookings-list.html'));
 });
 
+app.get('/settings.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'settings.html'));
+});
+
 app.listen(port, () => {
   console.log(`Web server running at http://localhost:${port}`);
 });

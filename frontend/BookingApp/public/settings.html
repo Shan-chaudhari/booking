@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ihjaz - Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #FF9500 0%, #5AC8FA 100%);
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-label {
+            font-size: 16px;
+            color: #333333;
+        }
+        
+        .setting-description {
+            font-size: 14px;
+            color: #666666;
+            margin-top: 4px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: #e0e0e0;
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .toggle-switch.active {
+            background: #007AFF;
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toggle-switch.active::after {
+            transform: translateX(24px);
+        }
+        
+        .select-input {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+        
+        .select-input:focus {
+            outline: none;
+            border-color: #007AFF;
+        }
+        
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .menu-item-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .menu-icon {
+            font-size: 20px;
+        }
+        
+        .menu-title {
+            font-size: 16px;
+            color: #333333;
+        }
+        
+        .menu-arrow {
+            font-size: 24px;
+            color: #999999;
+        }
+        
+        .logout-button {
+            background: #FF3B30;
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+        
+        .logout-button:hover {
+            background: #D63027;
+        }
+        
+        .version-info {
+            text-align: center;
+            color: #999999;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <img src="/ihjaz_logo.png" alt="Ihjaz Logo" class="logo" onerror="this.style.display='none'">
+            <div class="nav-links">
+                <a href="/home.html" class="nav-link">Home</a>
+                <a href="/bookings-list.html" class="nav-link">My Bookings</a>
+                <a href="/profile.html" class="nav-link">Profile</a>
+                <a href="/settings.html" class="nav-link">Settings</a>
+                <button class="logout-button" onclick="handleLogout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <div class="section-title">Notifications</div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Push Notifications</div>
+                    <div class="setting-description">Receive booking reminders and updates</div>
+                </div>
+                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+            </div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Email Notifications</div>
+                    <div class="setting-description">Receive booking confirmations via email</div>
+                </div>
+                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+            </div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">SMS Notifications</div>
+                    <div class="setting-description">Receive SMS alerts for urgent updates</div>
+                </div>
+                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Preferences</div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Language</div>
+                    <div class="setting-description">Select your preferred language</div>
+                </div>
+                <select class="select-input">
+                    <option>English</option>
+                    <option>Arabic</option>
+                    <option>Spanish</option>
+                </select>
+            </div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Time Zone</div>
+                    <div class="setting-description">Set your local time zone</div>
+                </div>
+                <select class="select-input">
+                    <option>UTC-5 (Eastern Time)</option>
+                    <option>UTC-6 (Central Time)</option>
+                    <option>UTC-7 (Mountain Time)</option>
+                    <option>UTC-8 (Pacific Time)</option>
+                </select>
+            </div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Date Format</div>
+                    <div class="setting-description">Choose your preferred date format</div>
+                </div>
+                <select class="select-input">
+                    <option>MM/DD/YYYY</option>
+                    <option>DD/MM/YYYY</option>
+                    <option>YYYY-MM-DD</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Account</div>
+            
+            <div class="menu-item" onclick="window.location.href='/profile.html'">
+                <div class="menu-item-content">
+                    <span class="menu-icon">👤</span>
+                    <span class="menu-title">Edit Profile</span>
+                </div>
+                <span class="menu-arrow">›</span>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-content">
+                    <span class="menu-icon">🔒</span>
+                    <span class="menu-title">Change Password</span>
+                </div>
+                <span class="menu-arrow">›</span>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-content">
+                    <span class="menu-icon">💳</span>
+                    <span class="menu-title">Payment Methods</span>
+                </div>
+                <span class="menu-arrow">›</span>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-content">
+                    <span class="menu-icon">📱</span>
+                    <span class="menu-title">Connected Devices</span>
+                </div>
+                <span class="menu-arrow">›</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Support</div>
+            
+            <div class="menu-item">
+                <div class="menu-item-content">
+                    <span class="menu-icon">❓</span>
+                    <span class="menu-title">Help Center</span>
+                </div>
+                <span class="menu-arrow">›</span>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-content">
+                    <span class="menu-icon">💬</span>
+                    <span class="menu-title">Contact Support</span>
+                </div>
+                <span class="menu-arrow">›</span>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-content">
+                    <span class="menu-icon">📄</span>
+                    <span class="menu-title">Privacy Policy</span>
+                </div>
+                <span class="menu-arrow">›</span>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-item-content">
+                    <span class="menu-icon">📜</span>
+                    <span class="menu-title">Terms of Service</span>
+                </div>
+                <span class="menu-arrow">›</span>
+            </div>
+        </div>
+
+        <button class="logout-button" onclick="handleLogout()">Logout</button>
+        
+        <div class="version-info">
+            Ihjaz Booking App v1.0.0
+        </div>
+    </div>
+
+    <script>
+        function toggleSwitch(element) {
+            element.classList.toggle('active');
+            // In a real app, save the preference to localStorage or backend
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/index.html';
+            }
+        }
+    </script>
+</body>
+</html>

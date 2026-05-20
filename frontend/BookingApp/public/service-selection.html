@@ -78,6 +78,35 @@
             box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3);
         }
         
+        .filter-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-button {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #666666;
+        }
+        
+        .filter-button:hover {
+            border-color: #007AFF;
+            color: #007AFF;
+        }
+        
+        .filter-button.active {
+            background: #007AFF;
+            border-color: #007AFF;
+            color: white;
+        }
+        
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -180,6 +209,15 @@
             <input type="text" class="search-input" placeholder="Search services..." id="search" oninput="filterServices()">
         </div>
 
+        <div class="filter-container">
+            <button class="filter-button active" onclick="filterByCategory('all', this)">All</button>
+            <button class="filter-button" onclick="filterByCategory('hair', this)">Hair</button>
+            <button class="filter-button" onclick="filterByCategory('spa', this)">Spa</button>
+            <button class="filter-button" onclick="filterByCategory('nails', this)">Nails</button>
+            <button class="filter-button" onclick="filterByPrice('low', this)">Under $30</button>
+            <button class="filter-button" onclick="filterByPrice('high', this)">$50+</button>
+        </div>
+
         <div class="services-grid" id="servicesGrid">
             <div class="service-card" onclick="selectService(this, 1)" data-id="1">
                 <div class="service-icon">💇</div>
@@ -247,13 +285,16 @@
 
     <script>
         let selectedService = null;
+        let activeFilter = 'all';
+        let activePriceFilter = null;
+        
         const services = [
-            { id: 1, name: 'Haircut', description: 'Professional haircut and styling', duration: '30 min', price: '$25' },
-            { id: 2, name: 'Massage', description: 'Full body relaxation massage', duration: '60 min', price: '$60' },
-            { id: 3, name: 'Facial', description: 'Deep cleansing facial treatment', duration: '45 min', price: '$45' },
-            { id: 4, name: 'Manicure', description: 'Nail care and polish', duration: '30 min', price: '$20' },
-            { id: 5, name: 'Pedicure', description: 'Foot care and massage', duration: '45 min', price: '$35' },
-            { id: 6, name: 'Hair Coloring', description: 'Professional hair coloring', duration: '90 min', price: '$80' },
+            { id: 1, name: 'Haircut', description: 'Professional haircut and styling', duration: '30 min', price: '$25', priceValue: 25, category: 'hair' },
+            { id: 2, name: 'Massage', description: 'Full body relaxation massage', duration: '60 min', price: '$60', priceValue: 60, category: 'spa' },
+            { id: 3, name: 'Facial', description: 'Deep cleansing facial treatment', duration: '45 min', price: '$45', priceValue: 45, category: 'spa' },
+            { id: 4, name: 'Manicure', description: 'Nail care and polish', duration: '30 min', price: '$20', priceValue: 20, category: 'nails' },
+            { id: 5, name: 'Pedicure', description: 'Foot care and massage', duration: '45 min', price: '$35', priceValue: 35, category: 'nails' },
+            { id: 6, name: 'Hair Coloring', description: 'Professional hair coloring', duration: '90 min', price: '$80', priceValue: 80, category: 'hair' },
         ];
 
         function selectService(element, serviceId) {
@@ -272,16 +313,53 @@
 
         function filterServices() {
             const searchTerm = document.getElementById('search').value.toLowerCase();
+            applyFilters(searchTerm);
+        }
+
+        function filterByCategory(category, button) {
+            // Update active filter button
+            document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            activeFilter = category;
+            activePriceFilter = null;
+            
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            applyFilters(searchTerm);
+        }
+
+        function filterByPrice(priceRange, button) {
+            // Update active filter button
+            document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            activeFilter = 'all';
+            activePriceFilter = priceRange;
+            
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            applyFilters(searchTerm);
+        }
+
+        function applyFilters(searchTerm) {
             const cards = document.querySelectorAll('.service-card');
             
             cards.forEach(card => {
                 const serviceId = parseInt(card.getAttribute('data-id'));
                 const service = services.find(s => s.id === serviceId);
                 
-                const matchesSearch = service.name.toLowerCase().includes(searchTerm) || 
-                                     service.description.toLowerCase().includes(searchTerm);
+                let matchesSearch = service.name.toLowerCase().includes(searchTerm) || 
+                                   service.description.toLowerCase().includes(searchTerm);
                 
-                card.style.display = matchesSearch ? 'block' : 'none';
+                let matchesCategory = activeFilter === 'all' || service.category === activeFilter;
+                
+                let matchesPrice = true;
+                if (activePriceFilter === 'low') {
+                    matchesPrice = service.priceValue < 30;
+                } else if (activePriceFilter === 'high') {
+                    matchesPrice = service.priceValue >= 50;
+                }
+                
+                card.style.display = (matchesSearch && matchesCategory && matchesPrice) ? 'block' : 'none';
             });
         }
 
